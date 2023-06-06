@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
 }
 
 application {
@@ -22,7 +23,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'info.picocli:picocli:4.7.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
-    //implementation 'com.fasterxml.jackson.core:jackson-dataformat-xml:2.14.2'
 }
 
 test {
