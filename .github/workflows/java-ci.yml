@@ -13,8 +13,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+<<<<<<< HEAD
 permissions:
   contents: read
+=======
+#permissions:
+#  contents: read
+>>>>>>> d44a8f6 (Added java-ci.yml)
 
 jobs:
   build:
@@ -29,7 +34,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - name: Build with Gradle
+<<<<<<< HEAD
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+=======
+      uses: gradle/gradle-build-action@v2
+>>>>>>> d44a8f6 (Added java-ci.yml)
       with:
         arguments: build
         build-root-directory: app
