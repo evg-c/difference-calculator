@@ -124,7 +124,7 @@ public class Differ {
         for (Map.Entry<String, Object> record: inMap.entrySet()) {
             String key = record.getKey();
             Object value = record.getValue();
-            rezult.append(" " + key);
+            rezult.append("  " + key);
             rezult.append(": " + value.toString() + "\n");
         }
         rezult.append("}");
