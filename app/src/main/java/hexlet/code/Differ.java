@@ -1,7 +1,7 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,7 +144,7 @@ public class Differ {
         return extension;
     }
 
-    public static boolean checkingParameters (String file1, String file2) throws IOException {
+    public static boolean checkingParameters(String file1, String file2) throws IOException {
         // сначала проверим параметры как файлы по отдельности (что они существуют и доступны для чтения)
         if (!checkParameterFile(file1) || (!checkParameterFile(file2))) {
             return false;
