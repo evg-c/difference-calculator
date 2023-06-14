@@ -12,8 +12,14 @@ install:
 run-dist:
 	./build/install/app/bin/app src/test/resources/file1.json src/test/resources/file2.json
 
-run:
+runjson:
 	./build/install/app/bin/app src/test/resources/file1.json src/test/resources/file2.json
+
+runyml:
+	./build/install/app/bin/app src/test/resources/file1.yml src/test/resources/file2.yml
+
+runhelp:
+	./build/install/app/bin/app -h
 
 test:
 	./gradlew test
