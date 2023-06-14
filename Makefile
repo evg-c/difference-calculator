@@ -12,8 +12,14 @@ install:
 run-dist:
 	make -C app run-dist
 
-run:
-	make -C app run
+runjson:
+	make -C app runjson
+
+runyml:
+	make -C app runyml
+
+runhelp:
+	make -C app runhelp
 
 lint:
 	make -C app lint
