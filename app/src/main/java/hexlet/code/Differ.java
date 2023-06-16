@@ -79,7 +79,6 @@ public class Differ {
 
     public static Map<String, Object> generateDiff(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
         // генерируем одну запись различий для конкретного ключа, передаваемого в качестве параметра (или две записи)
-        boolean flagOneRecord = true;
         Map<String, Object> diffMap = new LinkedHashMap<>();
         Object valueMap = map1.get(keyMap);
         String newKeyMap = "";
@@ -96,27 +95,8 @@ public class Differ {
         if (map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
             // ключ есть и в первом, и во втором файле, надо сравнивать значения
             return generateDiff2(keyMap, map1, map2);
-//            valueMap = map1.get(keyMap);
-//            Object valueMap2 = map2.get(keyMap);
-//            // необходимо проверить значения обоих ключей на null
-//            if (valueMap.equals(valueMap2)) {
-//                // значений в первом и втором совпадают, добавляем одну строку без изменений
-//                newKeyMap = "  " + keyMap;
-//            } else {
-//                // значения в первом и втором не совпадают, добавляем две строки
-//                flagOneRecord = false;
-//            }
         }
-        if (flagOneRecord) {
-            diffMap.put(newKeyMap, valueMap);
-        } else {
-            String key1 = "- " + keyMap;
-            Object value1 = map1.get(keyMap);
-            String key2 = "+ " + keyMap;
-            Object value2 = map2.get(keyMap);
-            diffMap.put(key1, value1);
-            diffMap.put(key2, value2);
-        }
+        diffMap.put(newKeyMap, valueMap);
         return diffMap;
     }
 
