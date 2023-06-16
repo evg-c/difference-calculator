@@ -15,8 +15,14 @@ run-dist:
 runjson:
 	make -C app runjson
 
+runjsonnested:
+	make -C app runjsonnested
+
 runyml:
 	make -C app runyml
+
+runymlnested:
+	make -C app runymlnested
 
 runhelp:
 	make -C app runhelp
