@@ -22,8 +22,9 @@ final class App implements Callable<Integer> {
     private String filepath1;
     @Parameters(index = "1", paramLabel = "filepath2", description = "path to second file")
     private String filepath2;
-    @Option(names = {"-f", "--format"}, paramLabel = "format", description = "output format [default: stylish]")
-    private String format = "stylish";
+    @Option(names = {"-f", "--format"}, paramLabel = "format",
+            description = "output format [default: stylish]", defaultValue = "stylish")
+    private String format;
 //    @Option(names = {"-V", "--version"}, versionHelp = true, description = "display version info")
 //    boolean versionInfoRequested;
 //    @Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help message")
