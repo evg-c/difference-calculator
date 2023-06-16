@@ -18,6 +18,12 @@ runjson:
 runyml:
 	./build/install/app/bin/app src/test/resources/file1.yml src/test/resources/file2.yml
 
+runjsonnested:
+	./build/install/app/bin/app src/test/resources/file3.json src/test/resources/file4.json
+
+runymlnested:
+	./build/install/app/bin/app src/test/resources/file5.yml src/test/resources/file6.yml
+
 runhelp:
 	./build/install/app/bin/app -h
 
