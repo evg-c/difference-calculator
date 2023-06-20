@@ -1,16 +1,14 @@
 package hexlet.code;
 
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Differ {
     public static String generate(String filepath1, String filepath2) throws IOException {
@@ -28,13 +26,12 @@ public class Differ {
         TreeSet<String> keys = new TreeSet<>(mapFromFile1.keySet());
         keys.addAll(mapFromFile2.keySet());
         // формируем мапу различий
-        Map<String, Object> resultMapDiff = new LinkedHashMap<>();
+        List<ElementOfDiff> resultListDiff = new ArrayList<>();
         for (String key: keys) {
-            Map<String, Object> oneRecord = new LinkedHashMap<>();
-            oneRecord = generateDiff(key, mapFromFile1, mapFromFile2);
-            resultMapDiff.putAll(oneRecord);
+            ElementOfDiff oneRecord = (ElementOfDiff) generateDiff(key, mapFromFile1, mapFromFile2);
+            resultListDiff.add(oneRecord);
         }
-        String resultString = toString(resultMapDiff);
+        String resultString = Formatter.formatting(format, resultListDiff);
         return resultString;
     }
 
@@ -59,86 +56,40 @@ public class Differ {
         }
         return true;
     }
-//
-//    public static Map<String, Object> readFileToMap(String filepath) throws IOException {
-//        // читаем файл и формируем из его данных структуру Map
-//        Path pathForFile = Paths.get(filepath);
-//        File inFile = pathForFile.toFile();
-//        String extensionFile = getExtensionFile(filepath);
-//        switch (extensionFile) {
-//            case ("json"), ("JSON"):
-//                ObjectMapper mapperJson = new ObjectMapper();
-//                return mapperJson.readValue(inFile, Map.class);
-//            case ("yml"), ("YML"):
-//                ObjectMapper mapperYml = new YAMLMapper();
-//                return mapperYml.readValue(inFile, Map.class);
-//            default:
-//                throw new IllegalStateException("Unexpected value: " + extensionFile);
-//        }
-//    }
 
-    public static Map<String, Object> generateDiff(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
+    public static ElementOfDiff generateDiff(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
         // генерируем одну запись различий для конкретного ключа, передаваемого в качестве параметра (или две записи)
-        Map<String, Object> diffMap = new LinkedHashMap<>();
-        Object valueMap = map1.get(keyMap);
-        String newKeyMap = "";
+        String statusElement = "unchanged";
         if (map1.keySet().contains(keyMap) && (!map2.keySet().contains(keyMap))) {
             // есть в первом файле и нет во втором, то есть ключ удален: -
-            newKeyMap = "- " + keyMap;
-            valueMap = map1.get(keyMap);
+            statusElement = "deleted";
         }
         if (!map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
             // нет в первом файле, есть во втором? то есть ключ добавлен: +
-            newKeyMap = "+ " + keyMap;
-            valueMap = map2.get(keyMap);
+            statusElement = "added";
         }
         if (map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
             // ключ есть и в первом, и во втором файле, надо сравнивать значения
-            return generateDiff2(keyMap, map1, map2);
+            return genDiffTwoFiles(keyMap, map1, map2);
         }
-        diffMap.put(newKeyMap, valueMap);
-        return diffMap;
+        ElementOfDiff recordDiff = new ElementOfDiff(keyMap, statusElement, map1.get(keyMap), map2.get(keyMap));
+        return recordDiff;
     }
 
-    public static Map<String, Object> generateDiff2(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
-        Map<String, Object> diffMap2 = new LinkedHashMap<>();
+    public static ElementOfDiff genDiffTwoFiles(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
+        String statusElement = "unchanged";
         Object valueMap = map1.get(keyMap);
-        String newKeyMap = "";
         // ключ есть и в первом, и во втором файле, надо сравнивать значения
         valueMap = map1.get(keyMap);
         Object valueMap2 = map2.get(keyMap);
         // необходимо проверить значения обоих ключей на null
         if ((valueMap == null) || (valueMap2 == null) || (!valueMap.equals(valueMap2))) {
-            String key1 = "- " + keyMap;
-            String key2 = "+ " + keyMap;
-            diffMap2.put(key1, valueMap);
-            diffMap2.put(key2, valueMap2);
+            statusElement = "changed";
         } else {
-            newKeyMap = "  " + keyMap;
-            diffMap2.put(newKeyMap, valueMap);
+            statusElement = "unchanged";
         }
-        return diffMap2;
-    }
-
-
-    public static String toString(Map<String, Object> inMap) {
-        if (inMap.isEmpty()) {
-            return "";
-        }
-        StringBuilder rezult = new StringBuilder();
-        rezult.append("{\n");
-        for (Map.Entry<String, Object> record: inMap.entrySet()) {
-            String key = record.getKey();
-            Object value = record.getValue();
-            rezult.append("  " + key);
-            if (value == null) {
-                rezult.append(": null"  + "\n");
-            } else {
-                rezult.append(": " + value.toString() + "\n");
-            }
-        }
-        rezult.append("}");
-        return rezult.toString();
+        ElementOfDiff recordDiff = new ElementOfDiff(keyMap, statusElement, map1.get(keyMap), map2.get(keyMap));
+        return recordDiff;
     }
 
     public static String getExtensionFile(String pathFile) {
