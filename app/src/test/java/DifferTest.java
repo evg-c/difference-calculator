@@ -68,4 +68,29 @@ public class DifferTest {
         String diffFromApp = Differ.generate("src/test/resources/file5.yml", "src/test/resources/file6.yml");
         assertEquals(correctDiff, diffFromApp);
     }
+
+    @Test
+    public void testGenerateDiffFromJsonNewPLain() throws IOException {
+        String resultDiff;
+        resultDiff = Files.readString(Path.of("src/test/resources/result4plain"));
+        String diffFromApp;
+        diffFromApp = Differ.generate("src/test/resources/file3.json", "src/test/resources/file4.json", "plain");
+        assertEquals(resultDiff, diffFromApp);
+    }
+
+    @Test
+    public void testGenerateDiffFromYmlNestedPlain() throws IOException {
+        String correctDiff;
+        correctDiff = Files.readString(Path.of("src/test/resources/result4plain"));
+        String diffFromApp = Differ.generate("src/test/resources/file5.yml", "src/test/resources/file6.yml", "plain");
+        assertEquals(correctDiff, diffFromApp);
+    }
+//    @Test
+//    public void testGenerateDiffFromJsonNewPLainTest() throws IOException {
+//        String resultDiff;
+//        resultDiff = Files.readString(Path.of("src/test/resources/result4plain"));
+//        String diffFromApp;
+//        diffFromApp = Differ.generate("src/test/resources/file3.json", "src/test/resources/file4.json", "plain");
+//        assertEquals(resultDiff, diffFromApp);
+//    }
 }
