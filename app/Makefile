@@ -36,6 +36,18 @@ runymlplain:
 runymlnestedplain:
 	./build/install/app/bin/app src/test/resources/file5.yml src/test/resources/file6.yml -f=plain
 
+runjsontojson:
+	./build/install/app/bin/app src/test/resources/file1.json src/test/resources/file2.json -f=json
+
+runjsonnestedtojson:
+	./build/install/app/bin/app src/test/resources/file3.json src/test/resources/file4.json -f=json
+
+runymltojson:
+	./build/install/app/bin/app src/test/resources/file1.yml src/test/resources/file2.yml -f=json
+
+runymlnestedtojson:
+	./build/install/app/bin/app src/test/resources/file5.yml src/test/resources/file6.yml -f=json
+
 runhelp:
 	./build/install/app/bin/app -h
 
