@@ -85,12 +85,12 @@ public class DifferTest {
         String diffFromApp = Differ.generate("src/test/resources/file5.yml", "src/test/resources/file6.yml", "plain");
         assertEquals(correctDiff, diffFromApp);
     }
-//    @Test
-//    public void testGenerateDiffFromJsonNewPLainTest() throws IOException {
-//        String resultDiff;
-//        resultDiff = Files.readString(Path.of("src/test/resources/result4plain"));
-//        String diffFromApp;
-//        diffFromApp = Differ.generate("src/test/resources/file3.json", "src/test/resources/file4.json", "plain");
-//        assertEquals(resultDiff, diffFromApp);
-//    }
+    @Test
+    public void testGenerateDiffFromJsonNewToJson() throws IOException {
+        String resultDiff;
+        resultDiff = Files.readString(Path.of("src/test/resources/resultDiff2.json"));
+        String diffFromApp;
+        diffFromApp = Differ.generate("src/test/resources/file3.json", "src/test/resources/file4.json", "json");
+        assertEquals(resultDiff, diffFromApp);
+    }
 }
