@@ -36,6 +36,18 @@ runymlplain:
 runymlnestedplain:
 	make -C app runymlnestedplain
 
+runjsontojson:
+	make -C app runjsontojson
+
+runymltojson:
+	make -C app runymltojson
+
+runjsonnestedtojson:
+	make -C app runjsonnestedtojson
+
+runymlnestedtojson:
+	make -C app runymlnestedtojson
+
 runhelp:
 	make -C app runhelp
 
