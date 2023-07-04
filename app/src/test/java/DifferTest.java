@@ -93,4 +93,12 @@ public class DifferTest {
         diffFromApp = Differ.generate("src/test/resources/file3.json", "src/test/resources/file4.json", "json");
         assertEquals(resultDiff, diffFromApp);
     }
+
+    @Test
+    public void testGenerateDiffFromYmlNestedToJson() throws IOException {
+        String correctDiff;
+        correctDiff = Files.readString(Path.of("src/test/resources/resultDiff2.json"));
+        String diffFromApp = Differ.generate("src/test/resources/file5.yml", "src/test/resources/file6.yml", "json");
+        assertEquals(correctDiff, diffFromApp);
+    }
 }
