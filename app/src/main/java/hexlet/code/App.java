@@ -25,10 +25,6 @@ final class App implements Callable<Integer> {
     @Option(names = {"-f", "--format"}, paramLabel = "format",
             description = "output format [default: stylish]", defaultValue = "stylish")
     private String format;
-//    @Option(names = {"-V", "--version"}, versionHelp = true, description = "display version info")
-//    boolean versionInfoRequested;
-//    @Option(names = {"-h", "--help"}, usageHelp = true, description = "display this help message")
-//    boolean usageHelpRequested;
     private static final int SUCCESS_EXIT_CODE = 0;
     private static final int ERROR_EXIT_CODE = 1;
 
