@@ -101,4 +101,55 @@ public class DifferTest {
         String diffFromApp = Differ.generate("src/test/resources/file5.yml", "src/test/resources/file6.yml", "json");
         assertEquals(correctDiff, diffFromApp);
     }
+
+    @Test
+    public void testExistFile() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("src/test/resources/file10.json", "src/test/resources/file2.json");
+        assertEquals(result, diffFromApp);
+    }
+
+    @Test
+    public void testEmptyNameFile() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("", "src/test/resources/file2.json");
+        assertEquals(result, diffFromApp);
+    }
+
+    @Test
+    public void testDifferentFiles() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("src/test/resources/file2.json", "src/test/resources/file2.json");
+        assertEquals(result, diffFromApp);
+    }
+
+    @Test
+    public void testDifferentExtensions() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("src/test/resources/file2.yml", "src/test/resources/file2.json");
+        assertEquals(result, diffFromApp);
+    }
+
+    @Test
+    public void testUnknownExtensions() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("src/test/resources/result2.txt", "src/test/resources/file2.json");
+        assertEquals(result, diffFromApp);
+    }
+
+    @Test
+    public void testEmptyFile() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("src/test/resources/file20.json", "src/test/resources/file21.json");
+        assertEquals(result, diffFromApp);
+    }
+
+    @Test
+    public void testUnknownFormat() throws IOException {
+        String result = "";
+        String diffFromApp = Differ.generate("src/test/resources/file20.json",
+                "src/test/resources/file21.json", "lala");
+        assertEquals(result, diffFromApp);
+    }
+
 }
