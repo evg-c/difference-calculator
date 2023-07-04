@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -20,21 +19,22 @@ public class Differ {
         if (!checkingParameters(filepath1, filepath2)) {
             return "";
         }
+        String string1 = Files.readString(Path.of(filepath1));
+        String string2 = Files.readString(Path.of(filepath2));
+        String extension1 = Differ.getExtensionFile(filepath1);
+        String extension2 = Differ.getExtensionFile(filepath2);
         // формируем мапы из входных json-файлов
-        Map<String, Object> mapFromFile1 = Parser.readFileToMap(filepath1);
-        Map<String, Object> mapFromFile2 = Parser.readFileToMap(filepath2);
+//        Map<String, Object> map1 = Parser.readFileToMap(filepath1);
+//        Map<String, Object> map2 = Parser.readFileToMap(filepath2);
+        Map<String, Object> map1 = Parser.readStringToMap(string1, extension1);
+        Map<String, Object> map2 = Parser.readStringToMap(string2, extension2);
         // формируем общий список ключей
-        TreeSet<String> keys = new TreeSet<>(mapFromFile1.keySet());
-        keys.addAll(mapFromFile2.keySet());
+        TreeSet<String> keys = new TreeSet<>(map1.keySet());
+        keys.addAll(map2.keySet());
         // формируем мапу различий
-//        List<ElementOfDiff> resultListDiff = new ArrayList<>();
-//        for (String key: keys) {
-//            ElementOfDiff oneRecord = (ElementOfDiff) generateDiff(key, mapFromFile1, mapFromFile2);
-//            resultListDiff.add(oneRecord);
-//        }
         List<Map<String, Object>> resultListDiff = new ArrayList<>();
         for (String key: keys) {
-            Map<String, Object> oneRecord = generateDiff(key, mapFromFile1, mapFromFile2);
+            Map<String, Object> oneRecord = CreateDataMap.generateDiff(key, map1, map2);
             resultListDiff.add(oneRecord);
         }
         String resultString = Formatter.formatting(format, resultListDiff);
@@ -63,75 +63,6 @@ public class Differ {
         return true;
     }
 
-//    public static ElementOfDiff generateDiff(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
-//        // генерируем одну запись различий для конкретного ключа, передаваемого в качестве параметра (или две записи)
-//        String statusElement = "unchanged";
-//        Object oldValue;
-//        Object newValue;
-//        if (map1.keySet().contains(keyMap) && (!map2.keySet().contains(keyMap))) {
-//            // есть в первом файле и нет во втором, то есть ключ удален: -
-//            statusElement = "deleted";
-//            oldValue = map1.get(keyMap);
-//        }
-//        if (!map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
-//            // нет в первом файле, есть во втором? то есть ключ добавлен: +
-//            statusElement = "added";
-//            newValue = map2.get(keyMap);
-//        }
-//        if (map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
-//            // ключ есть и в первом, и во втором файле, надо сравнивать значения
-//            return genDiffTwoFiles(keyMap, map1, map2);
-//        }
-//        ElementOfDiff recordDiff = new ElementOfDiff(keyMap, statusElement, oldValue, newValue);
-//        return recordDiff;
-//    }
-
-    public static Map<String, Object> generateDiff(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
-        // генерируем одну запись различий для конкретного ключа, передаваемого в качестве параметра (или две записи)
-        String statusElement = "unchanged";
-        Object oldValue = null;
-        Object newValue = null;
-        if (map1.keySet().contains(keyMap) && (!map2.keySet().contains(keyMap))) {
-            // есть в первом файле и нет во втором, то есть ключ удален: -
-            statusElement = "deleted";
-            oldValue = map1.get(keyMap);
-        }
-        if (!map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
-            // нет в первом файле, есть во втором? то есть ключ добавлен: +
-            statusElement = "added";
-            newValue = map2.get(keyMap);
-        }
-        if (map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
-            // ключ есть и в первом, и во втором файле, надо сравнивать значения
-            return diffTwo(keyMap, map1, map2);
-        }
-        return elementDiff(keyMap, statusElement, oldValue, newValue);
-    }
-
-    public static Map<String, Object> diffTwo(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
-        // ключ есть и в первом, и во втором файле, надо сравнивать значения
-        String statusElement = "unchanged";
-        Object valueMap = map1.get(keyMap);
-        Object valueMap2 = map2.get(keyMap);
-        // необходимо проверить значения обоих ключей на null
-        if ((valueMap == null) || (valueMap2 == null) || (!valueMap.equals(valueMap2))) {
-            statusElement = "changed";
-        } else {
-            statusElement = "unchanged";
-        }
-//        ElementOfDiff recordDiff = new ElementOfDiff(keyMap, statusElement, valueMap, valueMap2);
-        return elementDiff(keyMap, statusElement, valueMap, valueMap2);
-    }
-
-    public static Map<String, Object> elementDiff(String keyMap, String status, Object oldElement, Object newElement) {
-        LinkedHashMap recordDiff = new LinkedHashMap();
-        recordDiff.put("statusDiff", status);
-        recordDiff.put("oldValue", oldElement);
-        recordDiff.put("newValue", newElement);
-        LinkedHashMap recordList = new LinkedHashMap();
-        recordList.put(keyMap, recordDiff);
-        return recordList;
-    }
     public static String getExtensionFile(String pathFile) {
         Path pathForFile = Paths.get(pathFile);
         File inFile = pathForFile.toFile();
