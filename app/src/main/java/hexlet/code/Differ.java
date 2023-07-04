@@ -90,6 +90,16 @@ public class Differ {
             System.out.println("Файлы с разными расширениями (разного типа) !");
             return false;
         }
+        String string1 = Files.readString(Path.of(file1));
+        String string2 = Files.readString(Path.of(file2));
+        if (string1.isEmpty()) {
+            System.out.println("Файл" + file1 + " пустой!");
+            return false;
+        }
+        if (string2.isEmpty()) {
+            System.out.println("Файл" + file2 + " пустой!");
+            return false;
+        }
         return true;
     }
 }
