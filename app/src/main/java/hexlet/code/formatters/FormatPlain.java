@@ -10,9 +10,8 @@ public class FormatPlain {
             return "";
         }
         StringBuilder stringMap = new StringBuilder();
-        Object oldvalue = (Object) inMap.get("oldValue");
-        Object newvalue = (Object) inMap.get("newValue");
-        //stringMap.append("\n");
+        Object oldvalue = inMap.get("oldValue");
+        Object newvalue = inMap.get("newValue");
         switch (status) {
             case ("deleted"):
                 stringMap.append("Property '" + key + "' was removed");
@@ -36,7 +35,7 @@ public class FormatPlain {
             return "null";
         }
         if (value instanceof String) {
-            return ("'" + value.toString() + "'");
+            return ("'" + value + "'");
         }
         if ((value instanceof Integer) || (value instanceof Boolean)) {
             return (value.toString());
