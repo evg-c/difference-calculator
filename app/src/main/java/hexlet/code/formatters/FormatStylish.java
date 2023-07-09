@@ -7,12 +7,11 @@ public class FormatStylish {
     public static String formattingStylishMap(Map<String, Object> inMap, String key) {
         String status = (String) inMap.get("statusDiff");
         StringBuilder stringMap = new StringBuilder();
-        Object value;
+        Object value = inMap.get("oldValue");
         stringMap.append("\n" + "  ");
         switch (status) {
             case "deleted":
                 stringMap.append("- ");
-                value = inMap.get("oldValue");
                 break;
             case "added":
                 stringMap.append("+ ");
@@ -20,7 +19,6 @@ public class FormatStylish {
                 break;
             case "unchanged":
                 stringMap.append("  ");
-                value = inMap.get("oldValue");
                 break;
             case "changed":
                 stringMap.append(formattingStylishTwoStringMap(inMap, key));
@@ -28,8 +26,7 @@ public class FormatStylish {
             default:
                 throw new IllegalStateException("Unexpected status diff: " + status);
         }
-        stringMap.append(key);
-        stringMap.append(formattingValue(value));
+        stringMap.append(key + formattingValue(value));
         return stringMap.toString();
     }
 
@@ -44,9 +41,8 @@ public class FormatStylish {
     public static String formattingStylishTwoStringMap(Map<String, Object> mapDiff, String keyDiff) {
         StringBuilder rezult = new StringBuilder();
         String key = keyDiff;
-        String status = "changed";
-        Object oldvalue = (Object) mapDiff.get("oldValue");
-        Object newvalue = (Object) mapDiff.get("newValue");
+        Object oldvalue = mapDiff.get("oldValue");
+        Object newvalue = mapDiff.get("newValue");
         rezult.append("- " + key);
         rezult.append(formattingValue(oldvalue));
         rezult.append("\n" + "  " + "+ " + key);
