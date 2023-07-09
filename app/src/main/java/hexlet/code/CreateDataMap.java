@@ -1,43 +1,46 @@
 package hexlet.code;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 public class CreateDataMap {
-    public static Map<String, Object> generateDiff(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
-        // генерируем одну запись различий для конкретного ключа, передаваемого в качестве параметра (или две записи)
+    public static List<Map<String, Object>> generateListDiff(Map<String, Object> map1, Map<String, Object> map2) {
+        List<Map<String, Object>> resultListDiff = new ArrayList<>();
+        TreeSet<String> keysAllDiffs = new TreeSet<>(map1.keySet());
+        keysAllDiffs.addAll(map2.keySet());
+        for (String key: keysAllDiffs) {
+            Map<String, Object> oneRecord = CreateDataMap.diffOneKey(key, map1, map2);
+            resultListDiff.add(oneRecord);
+        }
+        return resultListDiff;
+    }
+    public static Map<String, Object> diffOneKey(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
         String statusElement = "unchanged";
         Object oldValue = null;
         Object newValue = null;
         if (map1.keySet().contains(keyMap) && (!map2.keySet().contains(keyMap))) {
-            // есть в первом файле и нет во втором, то есть ключ удален: -
             statusElement = "deleted";
             oldValue = map1.get(keyMap);
         }
         if (!map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
-            // нет в первом файле, есть во втором? то есть ключ добавлен: +
             statusElement = "added";
             newValue = map2.get(keyMap);
         }
         if (map1.keySet().contains(keyMap) && (map2.keySet().contains(keyMap))) {
-            // ключ есть и в первом, и во втором файле, надо сравнивать значения
-            return diffTwo(keyMap, map1, map2);
+            oldValue = map1.get(keyMap);
+            newValue = map2.get(keyMap);
+            if ((oldValue == null) && (newValue == null)) {
+                statusElement = "unchanged";
+            } else {
+                if ((oldValue == null) || (newValue == null) || (!oldValue.equals(newValue))) {
+                    statusElement = "changed";
+                }
+            }
         }
         return elementDiff(keyMap, statusElement, oldValue, newValue);
-    }
-
-    public static Map<String, Object> diffTwo(String keyMap, Map<String, Object> map1, Map<String, Object> map2) {
-        // ключ есть и в первом, и во втором файле, надо сравнивать значения
-        String statusElement = "unchanged";
-        Object valueMap = map1.get(keyMap);
-        Object valueMap2 = map2.get(keyMap);
-        // необходимо проверить значения обоих ключей на null
-        if ((valueMap == null) || (valueMap2 == null) || (!valueMap.equals(valueMap2))) {
-            statusElement = "changed";
-        } else {
-            statusElement = "unchanged";
-        }
-        return elementDiff(keyMap, statusElement, valueMap, valueMap2);
     }
 
     public static Map<String, Object> elementDiff(String keyMap, String status, Object oldElement, Object newElement) {
