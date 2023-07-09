@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import hexlet.code.formatters.FormatJson;
 import hexlet.code.formatters.FormatPlain;
 import hexlet.code.formatters.FormatStylish;
-
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +21,7 @@ public class Formatter {
         for (Map<String, Object> recordList : resultList) {
             for (Map.Entry<String, Object> recordMap : recordList.entrySet()) {
                 String key = recordMap.getKey();
-                Map<String, Object> nestedMap = new LinkedHashMap<>();
+                Map<String, Object> nestedMap;
                 nestedMap = (Map<String, Object>) recordMap.getValue();
                 String line = formatLine(format, nestedMap, recordMap, key);
                 String full = !format.equals("stylish") && !rezult.isEmpty() && !line.isEmpty() ? "\n" + line : line;
