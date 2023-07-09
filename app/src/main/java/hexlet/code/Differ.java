@@ -30,30 +30,29 @@ public class Differ {
     }
 
     public static boolean checkParameterFile(String file) throws IOException {
-        boolean resultCheck = true;
         if (file.isEmpty()) {
             System.out.println("Путь к файлу " + file + " не указан");
-            resultCheck = false;
+            return false;
         }
         Path pathForFile = Paths.get(file);
-        if (resultCheck && !Files.exists(pathForFile)) {
+        if (!Files.exists(pathForFile)) {
             System.out.println("Файл " + file + " не существует");
-            resultCheck = false;
+            return false;
         }
-        if (resultCheck && !Files.isReadable(pathForFile)) {
+        if (!Files.isReadable(pathForFile)) {
             System.out.println("Файл " + file + " недоступен для чтения");
-            resultCheck = false;
+            return false;
         }
-        if (resultCheck && Files.isDirectory(pathForFile)) {
+        if (Files.isDirectory(pathForFile)) {
             System.out.println(file + " это каталог, а не файл!");
-            resultCheck = false;
+            return false;
         }
-        String contentFile = resultCheck ? Files.readString(pathForFile) : "";
-        if (resultCheck && contentFile.isEmpty()) {
+        String contentFile = Files.readString(pathForFile);
+        if (contentFile.isEmpty()) {
             System.out.println("Содержимое файла " + file + " пустое!");
-            resultCheck = false;
+            return false;
         }
-        return resultCheck;
+        return true;
     }
 
     public static String getExtensionFile(String pathFile) {
@@ -66,24 +65,23 @@ public class Differ {
     }
 
     public static boolean checkingParameters(String file1, String file2, String format) throws IOException {
-        boolean resultCheck = true;
         if (!checkParameterFile(file1) || (!checkParameterFile(file2))) {
-            resultCheck = false;
+            return false;
         }
-        if (resultCheck && file1.equals(file2)) {
+        if (file1.equals(file2)) {
             System.out.println("В обоих параметрах один и тот же файл!");
-            resultCheck = false;
+            return false;
         }
-        String extensionFile1 = resultCheck ? getExtensionFile(file1) : "";
-        String extensionFile2 = resultCheck ? getExtensionFile(file2) : "";
-        if (resultCheck && !extensionFile1.equals(extensionFile2)) {
+        String extensionFile1 = getExtensionFile(file1);
+        String extensionFile2 = getExtensionFile(file2);
+        if (!extensionFile1.equals(extensionFile2)) {
             System.out.println("Файлы с разными расширениями (разного типа) !");
-            resultCheck = false;
+            return false;
         }
-        if (resultCheck && (!format.equals("stylish") && !format.equals("plain") && !format.equals("json"))) {
+        if (!format.equals("stylish") && !format.equals("plain") && !format.equals("json")) {
             System.out.println("Неизвестное значение параметра формата: " + format);
-            resultCheck = false;
+            return false;
         }
-        return resultCheck;
+        return true;
     }
 }
