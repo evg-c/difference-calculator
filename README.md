@@ -9,4 +9,11 @@
 [![asciicast](https://asciinema.org/a/MG55LAE18chWmQIfFqIqMIgM8.svg)](https://asciinema.org/a/MG55LAE18chWmQIfFqIqMIgM8)
 [![asciicast](https://asciinema.org/a/XpCqFug3PLGaUR7xzasxC5vTU.svg)](https://asciinema.org/a/XpCqFug3PLGaUR7xzasxC5vTU)
 
+### Вычислитель отличий
 
+Вычисляет отличия между двумя файлами
+
+### Как работает
+
+консольная утилита, определяющая разницу между двумя json-файлами или yml-
+файлами, выводящая разницу в трех разных форматах.
